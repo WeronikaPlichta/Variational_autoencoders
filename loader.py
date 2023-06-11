@@ -1,5 +1,7 @@
 import torch
 from torch.utils.data import DataLoader, Dataset
+
+
 class EEGSignalDataset(Dataset):
     def __init__(self, data, gt, m=m, s=s, soft_label=True, train=True):
         self.data = data
