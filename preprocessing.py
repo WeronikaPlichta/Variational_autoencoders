@@ -21,11 +21,19 @@ def load_signal(file, i):
     signal = eeg_filter_2.resample(sfreq=100)
     df = signal.to_data_frame(picks=channels)
     matrix = df.to_numpy()
-    np.save(f"data{i}", matrix)
+    # np.save(f"data{i}", matrix)
     return matrix
 
 
-def prepare_data(matrix):
+def prepare_data(matrix, j):
+    size = matrix.shape()
+    epochs = size[1]/6 #modulo z tego, pełna ilość 6 # W SEKUNDACH
+    new_signal = np.zeros((19, 6, epochs))
+    for i in range(epochs):
+        new_signal[:, :, i] = matrix[:, i*6, (i*6)+6]
+    np.save(f"data{j}", new_signal)
+
+
 
 
     return tensor
