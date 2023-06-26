@@ -3,14 +3,8 @@ import mne
 import numpy as np
 import matplotlib.pyplot as plt
 
-filepath_abnormal = "./data/abnormal/"
-filepath_normal = "./data/normal/"
 
-file_list_abnormal = os.listdir(filepath_abnormal)
-file_list_normal = os.listdir(filepath_normal)
-
-
-def load_signal(file, i):
+def load_signal(file):
     eeg_raw = mne.io.read_raw_edf(file)
     channels = eeg_raw.ch_names[0:20]
     eeg_data = eeg_raw.load_data()
@@ -21,22 +15,19 @@ def load_signal(file, i):
     signal = eeg_filter_2.resample(sfreq=100)
     df = signal.to_data_frame(picks=channels)
     matrix = df.to_numpy()
-    # np.save(f"data{i}", matrix)
     return matrix
 
 
-def prepare_data(matrix, j):
+def prepare_dataset(matrix):
     size = matrix.shape()
-    epochs = size[1]/6 #modulo z tego, pełna ilość 6 # W SEKUNDACH
-    new_signal = np.zeros((19, 6, epochs))
+    epochs = size[1]//600
+    freq = 40
+    new_signal = np.zeros((epochs, 19, freq, 600))
     for i in range(epochs):
-        new_signal[:, :, i] = matrix[:, i*6, (i*6)+6]
-    np.save(f"data{j}", new_signal)
+        new_signal[i, :, :, :] = matrix[:, i*600, (i*600)+600]
 
+    return new_signal
 
-
-
-    return tensor
 
 
 
