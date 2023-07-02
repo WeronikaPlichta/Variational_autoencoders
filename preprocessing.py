@@ -3,10 +3,12 @@ import mne
 import numpy as np
 import matplotlib.pyplot as plt
 
+from time_freq import cwt
+
 
 def load_signal(file):
-    eeg_raw = mne.io.read_raw_edf(file)
-    channels = eeg_raw.ch_names[0:20]
+    eeg_raw = mne.io.read_raw_edf(f"./data/normal/{file}")
+    channels = eeg_raw.ch_names[0:19]
     eeg_data = eeg_raw.load_data()
     eeg_data.set_eeg_reference('average', projection=True)
     eeg_data.apply_proj()
@@ -19,37 +21,13 @@ def load_signal(file):
 
 
 def prepare_dataset(matrix):
-    size = matrix.shape()
-    epochs = size[1]//600
-    freq = 40
-    new_signal = np.zeros((epochs, 19, freq, 600))
+    size = matrix.shape
+    print("MATRIX SHAPE:", matrix.shape)
+    epochs = size[0]//600
+    # freq = 40
+    #new_signal = np.zeros((600, 40, 20, epochs))
+    new_signal = np.zeros((600, 20, epochs))
     for i in range(epochs):
-        new_signal[i, :, :, :] = matrix[:, i*600, (i*600)+600]
-
+        # P = cwt(matrix[i * 600:(i * 600) + 600, :],0, freqs, Fs)
+        new_signal[:, :, i] = matrix[i*600:(i*600)+600, :]
     return new_signal
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

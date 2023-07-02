@@ -30,7 +30,7 @@ def cwt(x, MinF, MaxF, Fs, w=7.0, df=1.0, plot=False):
 
 
 def time_freq_scipy(signal):
-    powers = np.zeros((19, 60, 500))
+    powers = np.zeros((19, 40, 600))
     for ch in range(19):
 
         P_all = 0
