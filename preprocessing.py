@@ -1,4 +1,5 @@
 import os
+import scipy as sig
 import mne
 import numpy as np
 import matplotlib.pyplot as plt
@@ -24,10 +25,13 @@ def prepare_dataset(matrix):
     size = matrix.shape
     print("MATRIX SHAPE:", matrix.shape)
     epochs = size[0]//600
-    # freq = 40
-    #new_signal = np.zeros((600, 40, 20, epochs))
-    new_signal = np.zeros((600, 20, epochs))
+    new_signal = np.zeros((600, 40, 20, epochs))
+    # new_signal = np.zeros((600, 20, epochs))
+    freq = np.linspace(1, 40, 100)
+    w = 7
+    widths = w * 100 / (2 * freq * np.pi)
     for i in range(epochs):
-        # P = cwt(matrix[i * 600:(i * 600) + 600, :],0, freqs, Fs)
-        new_signal[:, :, i] = matrix[i*600:(i*600)+600, :]
+        for j in range(20):
+            P = sig.cwt(matrix[i * 600:(i * 600) + 600, j], sig.morlet2, widths, w=w)
+            new_signal[:, :, j, i] = P
     return new_signal

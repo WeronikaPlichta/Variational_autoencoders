@@ -24,6 +24,7 @@ suma = np.concatenate(all_data, axis=-1)
 print("SUMA SHAPE", suma.shape)
 train_data = torch.from_numpy(suma.astype(np.float32))
 print(train_data.shape)
+torch.save(train_data, "train_data.pt")
 dataloader = DataLoader(train_data, batch_size=16, num_workers=1, shuffle=True)
 
 #umap - paczka pythonowa
