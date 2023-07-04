@@ -21,17 +21,18 @@ def load_signal(file):
     return matrix
 
 
-def prepare_dataset(matrix):
+def prepare_dataset(matrix): #NIE OBRAZKI TYLKO DALEJ SYGNAŁY, NA OBRAZKI BATCHAMI, TAK JAK TO JAREK ZROBIŁ W SWOIM NOTEBOOKU
     size = matrix.shape
     print("MATRIX SHAPE:", matrix.shape)
     epochs = size[0]//600
-    new_signal = np.zeros((40, 60, 20, epochs))
-    # new_signal = np.zeros((600, 20, epochs))
-    freq = np.linspace(1, 40, 40)
-    w = 7
-    widths = w * 100 / (2 * freq * np.pi)
+    # new_signal = np.zeros((40, 60, 20, epochs))
+    new_signal = np.zeros((600, 20, epochs))
+    # freq = np.linspace(1, 40, 40)
+    # w = 7
+    # widths = w * 100 / (2 * freq * np.pi)
     for i in range(epochs):
-        for j in range(20):
-            P = ss.cwt(matrix[i * 600:(i * 600) + 600, j], ss.morlet2, widths, w=w)
-            new_signal[:, :, j, i] = np.abs(P[:, ::10])
+        # for j in range(20):
+            # P = ss.cwt(matrix[i * 600:(i * 600) + 600, j], ss.morlet2, widths, w=w)
+            # new_signal[:, :, j, i] = np.abs(P[:, ::10])
+        new_signal[:, :, i] = matrix[i * 600:(i * 600) + 600, :]
     return new_signal
