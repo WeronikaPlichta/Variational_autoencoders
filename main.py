@@ -15,16 +15,18 @@ file_list_normal = os.listdir(filepath_normal)
 
 # number_of_cases, channels, zakres czestości mapki, czas
 all_data = []
+i=0
 for file in file_list_normal:
+    i +=1
     new_signal = load_signal(file)
-    raw_data = prepare_dataset(new_signal)
+    raw_data = prepare_dataset(new_signal, i)
     all_data.append(raw_data)
 
 suma = np.concatenate(all_data, axis=-1)
 print("SUMA SHAPE", suma.shape)
 train_data = torch.from_numpy(suma.astype(np.float32))
 print(train_data.shape)
-torch.save(train_data, "train_data.pt")
+# torch.save(train_data, "train_data.pt")
 dataloader = DataLoader(train_data, batch_size=16, num_workers=1, shuffle=True)
 
 #umap - paczka pythonowa

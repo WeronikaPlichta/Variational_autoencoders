@@ -1,6 +1,7 @@
 import os
 import scipy.signal as ss
 import mne
+import torch
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -21,7 +22,7 @@ def load_signal(file):
     return matrix
 
 
-def prepare_dataset(matrix): #NIE OBRAZKI TYLKO DALEJ SYGNAŁY, NA OBRAZKI BATCHAMI, TAK JAK TO JAREK ZROBIŁ W SWOIM NOTEBOOKU
+def prepare_dataset(matrix, file): #NIE OBRAZKI TYLKO DALEJ SYGNAŁY, NA OBRAZKI BATCHAMI, TAK JAK TO JAREK ZROBIŁ W SWOIM NOTEBOOKU
     size = matrix.shape
     print("MATRIX SHAPE:", matrix.shape)
     epochs = size[0]//600
@@ -35,4 +36,6 @@ def prepare_dataset(matrix): #NIE OBRAZKI TYLKO DALEJ SYGNAŁY, NA OBRAZKI BATCH
             # P = ss.cwt(matrix[i * 600:(i * 600) + 600, j], ss.morlet2, widths, w=w)
             # new_signal[:, :, j, i] = np.abs(P[:, ::10])
         new_signal[:, :, i] = matrix[i * 600:(i * 600) + 600, :]
+    data = torch.from_numpy(new_signal.astype(np.float32))
+    torch.save(data, f"./data/datasets/data_n{file}.pt")
     return new_signal
